@@ -28,4 +28,4 @@ if __name__ == "__main__":
     print("primer registro:", d["etiqueta"][0],d["precio"][0])
     print("ultimo registro:", d["etiqueta"][-1],d["precio"][-1])
 
-#daniel gay
+
