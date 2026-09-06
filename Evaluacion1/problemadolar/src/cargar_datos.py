@@ -1,3 +1,6 @@
+#Integrantes: Elias Gonzalez, Daniel Navarrete
+#Ramo: Computacion Numerica
+
 import numpy as np
  
  
