@@ -1,3 +1,5 @@
+#Integrantes: Elias Gonzalez, Daniel Navarrete
+#Ramo: Computacion Numerica
 import numpy as np
 import matplotlib.pyplot as plt
 from cargar_datos import cargar_dolar
