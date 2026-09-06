@@ -1,50 +1,49 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from cargar_datos import cargar_dolar
-from errores import redondear_cifras_sig, error_absoluto
-
-
-def demo_b1():
-    x = 1000.76
-    x3 = redondear_cifras_sig(x, 3)
-    print(x, "->", x3, "error =", error_absoluto(x, x3))
-
-
-def ida_y_vuelta(monto=1_000_000.0):
+from errores import redondear_cifras_sig, error_absoluto, propagar_suma_resta
+ 
+N_CIFRAS = 3  # el enunciado pide 3 cifras significativas para las restas
+ 
+ 
+def variacion_anual():
     d = cargar_dolar()
-    precios = d["precio"]
-
-    usd = monto / precios
-    monto_final = usd * precios
-    diferencia = monto_final - monto
-
-    plt.figure(figsize=(10, 4))
-    plt.plot(d["etiqueta"], diferencia, marker="o")
-    plt.xticks(rotation=90, fontsize=6)
-    plt.ylabel("Diferencia respecto a M (CLP)")
-    plt.title("Deriva de la ida y vuelta en punto flotante")
-    plt.tight_layout()
-    plt.savefig("graficos/ida_y_vuelta.png")
-    plt.close()
-
-    return diferencia
-
-
-def demo_b4():
-    a = np.float32(875.66)
-    b = np.float32(874.67)
-    r32 = a - b
-
-    c = np.float64(875.66)
-    e = np.float64(874.67)
-    r64 = c - e
-
-    print("float32:", r32)
-    print("float64:", r64)
-    return r32, r64
-
-
+    anios = np.unique(d["anio"])
+ 
+    resultados = []
+    for a in anios:
+        # Ubicamos el precio de enero y de diciembre de este año
+        mask_ene = (d["anio"] == a) & (d["mes_num"] == 1)
+        mask_dic = (d["anio"] == a) & (d["mes_num"] == 12)
+        p_ene = d["precio"][mask_ene][0]
+        p_dic = d["precio"][mask_dic][0]
+ 
+        # Redondeamos ambos precios antes de restar (así lo pide el enunciado)
+        p_ene_r = redondear_cifras_sig(p_ene, N_CIFRAS)
+        p_dic_r = redondear_cifras_sig(p_dic, N_CIFRAS)
+ 
+        # Error absoluto de cada redondeo individual
+        ea_ene = error_absoluto(p_ene, p_ene_r)
+        ea_dic = error_absoluto(p_dic, p_dic_r)
+ 
+        # Es una resta -> los errores absolutos se suman
+        delta = p_dic_r - p_ene_r
+        ea_delta = propagar_suma_resta(ea_ene, ea_dic)
+        er_delta = ea_delta / abs(delta) * 100 if delta != 0 else np.inf
+ 
+        resultados.append({
+            "anio": int(a),
+            "p_enero": p_ene_r,
+            "p_diciembre": p_dic_r,
+            "delta": delta,
+            "ea_delta": ea_delta,
+            "er_delta": er_delta,
+        })
+ 
+    # Menor error relativo = más confiable, va primero
+    resultados.sort(key=lambda r: r["er_delta"])
+    return resultados
+ 
+ 
 if __name__ == "__main__":
-    demo_b1()
-    ida_y_vuelta()
-    demo_b4()
+    for r in variacion_anual():
+        print(r["anio"], r["delta"], "+-", round(r["ea_delta"], 2), f"({r['er_delta']:.1f}%)")
