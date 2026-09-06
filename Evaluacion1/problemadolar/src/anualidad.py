@@ -1,3 +1,5 @@
+#Integrantes: Elias Gonzalez, Daniel Navarrete
+#Ramo: Computacion Numerica
 import numpy as np
 from cargar_datos import cargar_dolar
 from errores import redondear_cifras_sig, error_absoluto, propagar_suma_resta
