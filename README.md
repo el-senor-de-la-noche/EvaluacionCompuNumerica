@@ -38,7 +38,7 @@ Todo se corre **desde la raíz del repositorio** (los paths a `data/` y
 pip install -r requirements.txt
 python3 src/errores.py          # A1, A2, A3, A5 (imprime resultados y genera graficos/1 a 4)
 python3 src/anualidad.py        # A4
-python3 src/punto_flotante.py   # B1, B2, B4 (genera graficos/ida_y_vuelta.png)
+python3 src/punto_flotante.py   # B1, B2, B4 (genera graficos/5_ida_y_vuelta.png)
 ```
 
 ## Norma arbitraria adoptada (cifras significativas)
