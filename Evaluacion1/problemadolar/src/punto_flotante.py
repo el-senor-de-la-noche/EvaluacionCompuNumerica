@@ -29,7 +29,7 @@ def ida_y_vuelta(monto=1_000_000.0):
     plt.ylabel("Diferencia respecto a M (CLP)")
     plt.title("Deriva de la ida y vuelta en punto flotante")
     plt.tight_layout()
-    plt.savefig("graficos/ida_y_vuelta.png")
+    plt.savefig("graficos/5_ida_y_vuelta.png")
     plt.close()
  
     return diferencia
